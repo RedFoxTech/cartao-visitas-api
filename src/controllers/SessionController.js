@@ -2,6 +2,7 @@ const passport = require('passport');
 
 module.exports = {
     async authLocal(req, res, next) {
+
         passport.authenticate('local', function (err, user, info) {
             if (err) {
                 return next(err);
@@ -18,6 +19,7 @@ module.exports = {
                 return res.send();
             });
         })(req, res, next);
+        
     }
 
 }

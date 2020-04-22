@@ -65,6 +65,7 @@ module.exports = function (passport) {
             })
         }
     ));
+    
     passport.use(new GoogleStrategy({
             clientID: "803713707151-cv38nd7i4913k6l0s4vino3p37p50qns.apps.googleusercontent.com",
             clientSecret: "bPB_Ozd6Sjkdprt_LMlBYE7w",
