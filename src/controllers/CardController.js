@@ -1,9 +1,9 @@
 module.exports = app => {
-    const businessCard = app.models.BusinessCard;
+    const card = app.models.card;
 
     return {
         index: (req, res) => {
-            businessCard.find({}).then(cards => {
+            card.find({}).then(cards => {
                 res.json(cards);
             }).catch(() => {
                 res.json({ msg: 'falha ao listar' });
@@ -12,7 +12,7 @@ module.exports = app => {
 
         show: (req, res) => {
             const { id } = req.params;
-            businessCard.findOne({_id: id}).then(card => {
+            card.findOne({_id: id}).then(card => {
                 res.json(card);
             }).catch(() => {
                 res.json({ msg: 'card não encontrado!' });
@@ -22,7 +22,7 @@ module.exports = app => {
         create: (req, res) => {
             const cardData = {...req.body}
 
-            businessCard.create(cardData).then(() => {
+            card.create(cardData).then(() => {
                 res.json({ msg: 'cartão adicionado!'});
             }).catch(() => {
                 res.json({ msg: 'falha ao criar' });
@@ -33,7 +33,7 @@ module.exports = app => {
             const cardData = { ...req.body };
             const { id } = req.params;
 
-            businessCard.update({ _id: id }, cardData).then(() => {
+            card.update({ _id: id }, cardData).then(() => {
                 res.json({ msg: 'card atualizado!' });
             }).catch(() => {
                 res.json({ msg: 'falha ao atualizar' });
@@ -43,7 +43,7 @@ module.exports = app => {
         remove: (req, res) => {
             const { id } = req.body;
 
-            businessCard.deleteOne({ _id: id }).then(() => {
+            card.deleteOne({ _id: id }).then(() => {
                 res.json({ msg: 'card deletado!' });
             }).catch(() => {
                 res.json({ msg: 'falha ao excluir card' });

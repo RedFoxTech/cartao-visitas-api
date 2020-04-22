@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const { MONGODB_URI, MONGODB_DATABASE } = require('../config/config');
 
 module.exports = () => {
