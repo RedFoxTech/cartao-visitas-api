@@ -1,7 +1,12 @@
-const mongoose = require('../database/index');
+const findOrCreate = require('mongoose-findorcreate');
 const bcrypt = require('bcrypt-nodejs')
 
+const mongoose = require('../database/index');
+
 const UserSchema = new mongoose.Schema({
+    googleId:{
+        type: String,
+    },
     name:{
         type: String,
         require: true,
@@ -51,6 +56,8 @@ UserSchema.pre('save', async function (next) {
 
     next();
 });
+
+UserSchema.plugin(findOrCreate);
 
 const User = mongoose.model('User', UserSchema);
 

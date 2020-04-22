@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(passport.initialize());
 app.use(session({
-    secret: 'keyboard cat'
+    secret: '2e3817293fc275dbee74bd71ce6eb056'
 }));
 app.use(passport.session());
 
@@ -25,6 +25,7 @@ require('./config/auth')(passport);
 
 require('./routes/user')(app);
 require('./routes/session')(app);
+
 
 app.listen(config.PORT);
 
