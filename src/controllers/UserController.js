@@ -3,7 +3,9 @@ const User = require('../models/user');
 module.exports = {
     async index(req, res) {
         try {
-            const users = await User.find();
+            const users = await User.findById({
+                _id: req.params.userId
+            });
 
             return res.send({
                 users
