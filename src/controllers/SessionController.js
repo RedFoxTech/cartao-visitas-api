@@ -9,7 +9,7 @@ module.exports = {
             }
             if (!user) {
                 return res.status(400).send({
-                    error: 'User not found'
+                    error: 'Incorrect email or password'
                 })
             }
             req.logIn(user, function (err) {
@@ -19,7 +19,7 @@ module.exports = {
                 return res.send();
             });
         })(req, res, next);
-        
+
     }
 
 }

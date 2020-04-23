@@ -3,7 +3,6 @@ const session = require('express-session');
 var bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('passport');
-
 const config = require('./config/config');
 
 var app = express();
@@ -25,9 +24,8 @@ require('./config/auth')(passport);
 
 require('./routes/user')(app);
 require('./routes/session')(app);
-
+require('./routes/schedule')(app);
 
 app.listen(config.PORT);
-
 
 module.exports = app;
