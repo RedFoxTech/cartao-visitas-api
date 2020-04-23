@@ -1,5 +1,6 @@
 const passport = require('passport');
 const { ExtractJwt, Strategy } = require('passport-jwt');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const opt = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -7,10 +8,10 @@ const opt = {
 }
 
 module.exports = (app) => {
-    const users = app.models.user;
+    const Users = app.models.user;
 
     passport.use(new Strategy(opt, (payload, done) => {
-        users.findOne({ _id: payload.id }).then(user => {
+        Users.findOne({ _id: payload.id }).then(user => {
             if(user)
                 return done(null, user);
             
@@ -20,8 +21,27 @@ module.exports = (app) => {
         });
     }));
 
+    passport.use(new GoogleStrategy({
+        clientID: "803713707151-cv38nd7i4913k6l0s4vino3p37p50qns.apps.googleusercontent.com",
+        clientSecret: "bPB_Ozd6Sjkdprt_LMlBYE7w",
+        callbackURL: "http://localhost:3000/google/callback"
+    },
+        function (accessToken, refreshToken, profile, done) {
+
+            User.findOrCreate({
+                googleId:profile.id,
+                name:profile._json.name,
+                email:profile._json.email
+            }, function (err, user) {
+                return done(err, user);
+            });
+        }
+    ));
+
     return {
-        authenticate: passport.authenticate('jwt', { session: false }),
-        initialize: passport.initialize()
+        initialize: passport.initialize(),
+        authenticate: passport.authenticate('google'),
+        authGoogle: passport.authenticate('google', { scope: ['profile', 'email']}),
+        authJwt: passport.authenticate('jwt', { session: false })
     }
 }
