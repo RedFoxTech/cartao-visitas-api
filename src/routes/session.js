@@ -1,20 +1,14 @@
-const express = require('express');
-const passport = require('passport');
+module.exports = app => {
+    const SessionController = app.controllers.SessionController;
+    const auth = app.config.auth;
 
-const SessionController = require('../controllers/SessionController');
-
-const router = express.Router();
-
-router.post('/auth', SessionController.authLocal);
-
-router.get('/google', passport.authenticate('google', {
-    scope:['profile', 'email']
-}));
-
-router.get('/google/callback', passport.authenticate('google'),
-    function (req, res) {
+    app.post('/login', SessionController.create);
+    app.get('/teste', auth.authJwt, (req, res) => res.json({
+        ok: true
+    }));
+    app.get('/google', auth.authGoogle);
+    app.get('/google/callback', auth.authGoogle, (req, res) => {
         res.send()
-    }
-)
+    })
 
-module.exports = app => app.use('', router)
+}

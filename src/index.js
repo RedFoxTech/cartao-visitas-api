@@ -1,30 +1,28 @@
-var express = require('express');
-const session = require('express-session');
-var bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
-const passport = require('passport');
+const consign = require('consign');
+const chain = require('middleware-chain');
+
 const config = require('./config/config');
 
 var app = express();
-
-require('./config/auth')(passport);
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-app.use(passport.initialize());
-app.use(session({
-    secret: '2e3817293fc275dbee74bd71ce6eb056'
-}));
-app.use(passport.session());
 
-require('./config/auth')(passport);
+consign({ cwd: 'src' })
+.include('database')
+.then('models')
+.then('config')
+.then('controllers')
+.then('routes')
+.into(app)
 
-require('./routes/user')(app);
-require('./routes/session')(app);
-require('./routes/schedule')(app);
+chain([app.config.initialize]);
 
 app.listen(config.PORT);
 

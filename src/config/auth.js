@@ -1,85 +1,65 @@
-const bcrypt = require('bcrypt-nodejs');
-
+const passport = require('passport');
+const {
+    ExtractJwt,
+    Strategy
+} = require('passport-jwt');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const LocalStrategy = require('passport-local').Strategy;
 
-const User = require('../models/user');
+const opt = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'secret'
+}
 
-module.exports = function (passport) {
-    async function findUser(email, callback) {
-        await User.findOne({
-            email
-        }, function (err, doc) {
-            callback(err, doc);
-        }).select('+password');
-    }
+module.exports = (app) => {
+    const Users = app.models.user;
 
-    async function findUserById(id, callback) {
-        const ObjectId = require("mongodb").ObjectId;
-        await User.findOne({
-            _id: ObjectId(id)
-        }, (err, doc) => {
-            callback(err, doc);
+    passport.use(new Strategy(opt, (payload, done) => {
+        Users.findOne({
+            _id: payload.id
+        }).then(user => {
+            if (user)
+                return done(null, user);
+
+            return done(null, false);
+        }).catch(err => {
+            return done(err, false);
         });
-    }
+    }));
 
-    passport.serializeUser(function (user, done) {
-        done(null, user._id);
-    });
-
-    passport.deserializeUser(function (id, done) {
-        findUserById(id, function (err, user) {
-            done(err, user);
-        });
-    });
-
-    passport.use(new LocalStrategy({
-            usernameField: 'email',
-            passwordField: 'password'
-        },
-        (email, password, done) => {
-            findUser(email, (err, user) => {
-                if (err) {
-                    return done(err)
-                }
-
-                // usuário inexistente
-                if (!user) {
-                    return done(null, false, {
-                        message: 'User not found'
-                    })
-                }
-
-                // comparando as senhas
-                bcrypt.compare(password, user.password, (err, isValid) => {
-                    if (err) {
-                        return done(err)
-                    }
-                    if (!isValid) {
-                        return done(null, false, {
-                            message: 'Incorrect password'
-                        })
-                    }
-                    return done(null, user)
-                })
-            })
-        }
-    ));
-    
     passport.use(new GoogleStrategy({
             clientID: "803713707151-cv38nd7i4913k6l0s4vino3p37p50qns.apps.googleusercontent.com",
             clientSecret: "bPB_Ozd6Sjkdprt_LMlBYE7w",
             callbackURL: "http://localhost:3000/google/callback"
         },
         function (accessToken, refreshToken, profile, done) {
-            
-            User.findOrCreate({
-                googleId:profile.id,
-                name:profile._json.name,
-                email:profile._json.email
+
+            Users.findOrCreate({
+                googleId: profile.id,
+                name: profile._json.name,
+                email: profile._json.email
             }, function (err, user) {
                 return done(err, user);
             });
         }
     ));
+
+    passport.serializeUser(function (user, done) {
+        done(null, user);
+    });
+
+    passport.deserializeUser(function (user, done) {
+        done(null, user);
+    });
+
+
+    app.use(passport.initialize())
+    return {
+        authenticate: passport.authenticate('google'),
+        authGoogle: passport.authenticate('google', {
+            scope: ['profile', 'email']
+        }),
+        authJwt: passport.authenticate('jwt', {
+            session: false
+        })
+    }
 }

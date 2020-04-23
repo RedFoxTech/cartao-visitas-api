@@ -1,18 +1,23 @@
-const mongoose = require('../database');
+const {
+    Schema,
+    model
+} = require('mongoose');
 
-const ScheduleSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    cards: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Card',
-        required: true
-    }]
-});
+module.exports = () => {
+    const ScheduleSchema = new Schema({
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+            unique: true
+        },
+        cards: [{
+            type: Schema.Types.ObjectId,
+            ref: 'businesscard',
+            required: true
+        }]
+    });
 
-const Schedule = mongoose.model('Schedule', ScheduleSchema);
+    return model('Schedule', ScheduleSchema);
 
-module.exports = Schedule;
+}

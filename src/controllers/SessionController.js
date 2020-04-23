@@ -1,25 +1,25 @@
-const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt-nodejs');
 
-module.exports = {
-    async authLocal(req, res, next) {
+module.exports = app => {
+    const Users = app.models.user;
 
-        passport.authenticate('local', function (err, user, info) {
-            if (err) {
-                return next(err);
-            }
-            if (!user) {
-                return res.status(400).send({
-                    error: 'Incorrect email or password'
-                })
-            }
-            req.logIn(user, function (err) {
-                if (err) {
-                    return next(err);
-                }
-                return res.send();
-            });
-        })(req, res, next);
+    return{
+        create: (req, res) => {
+            const { email, password } = req.body;
+            
+            Users.findOne({ email }, (err, user) => {
+                //se não encontrar usuario
+                if(!user) return res.json({msg: 'incorrect email!'});
+                //se a senha estiver errada
+                if(!bcrypt.compareSync(password, user.password)) 
+                    return res.json({ msg: 'password incorrect'});
 
+                const token = jwt.sign({ id: user._id }, 'secret');
+                const bearerToken = `Bearer ${token}`;
+
+                res.json({token: bearerToken});
+            }).select('+password');
+        }
     }
-
 }

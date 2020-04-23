@@ -1,10 +1,9 @@
-const express = require('express');
 
-const ScheduleController = require('../controllers/ScheduleController');
+module.exports = app => {
 
-const router = express.Router();
+    const schedule = app.controllers.ScheduleController;
 
-router.get('/:userId', ScheduleController.index);
-router.put('/:userId', ScheduleController.update);
-
-module.exports = app => app.use('/schedule', router);
+    app.get('/schedule/:userId', schedule.index);
+    app.put('/schedule/:userId', schedule.update);
+    app.get('/schedule/export/:userId', schedule.exportTocsv);
+}
