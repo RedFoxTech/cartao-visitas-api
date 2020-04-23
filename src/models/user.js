@@ -1,6 +1,8 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt-nodejs')
 
+const findOrCreate = require('mongoose-findorcreate');
+
 module.exports = () => {
     const UserSchema = new Schema({
         name:{
@@ -52,6 +54,8 @@ module.exports = () => {
     
         next();
     });
+
+    UserSchema.plugin(findOrCreate);
     
     return model('User', UserSchema);
 }

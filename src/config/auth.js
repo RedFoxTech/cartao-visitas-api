@@ -10,6 +10,17 @@ const opt = {
 module.exports = (app) => {
     const Users = app.models.user;
 
+    passport.serializeUser((user, done) => {
+        done(null, user.id);
+    });
+
+    passport.deserializeUser((id, done) => {
+        Users.find({ _id: id }).then(user => {
+            done(null, user.id);
+        })
+    })
+
+
     passport.use(new Strategy(opt, (payload, done) => {
         Users.findOne({ _id: payload.id }).then(user => {
             if(user)
@@ -28,7 +39,7 @@ module.exports = (app) => {
     },
         function (accessToken, refreshToken, profile, done) {
 
-            User.findOrCreate({
+            Users.findOrCreate({
                 googleId:profile.id,
                 name:profile._json.name,
                 email:profile._json.email
@@ -38,8 +49,9 @@ module.exports = (app) => {
         }
     ));
 
+    app.use(passport.initialize());
+
     return {
-        initialize: passport.initialize(),
         authenticate: passport.authenticate('google'),
         authGoogle: passport.authenticate('google', { scope: ['profile', 'email']}),
         authJwt: passport.authenticate('jwt', { session: false })

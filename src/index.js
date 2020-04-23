@@ -22,7 +22,7 @@ consign({ cwd: 'src' })
 .then('routes')
 .into(app)
 
-chain([app.config.initialize]);
+//chain([app.config.initialize]);
 
 app.listen(config.PORT);
 
