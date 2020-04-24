@@ -3,13 +3,12 @@ module.exports = app => {
     const auth = app.config.auth;
 
     app.post('/login', SessionController.create);
-    app.get('/teste', auth.authJwt, (req, res) => res.json({ ok: true }));
+    app.get('/teste', auth.authJwt, (req, res) => res.json({
+        user: req.user
+    }));
     app.get('/google', auth.authGoogle);
-    app.get('/google/callback', auth.authGoogle, (req, res) => {
-            res.send("Ok")
-        }
-    )
+    app.get('/google/callback', auth.authenticate, (req, res) => {
+        res.json({ user: req.user });
+    })
+
 }
-
-
-

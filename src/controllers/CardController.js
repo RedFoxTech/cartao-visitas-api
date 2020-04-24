@@ -1,52 +1,85 @@
 module.exports = app => {
+    const schedule = app.models.schedule;
     const card = app.models.card;
+    const users = app.models.user;
 
     return {
         index: (req, res) => {
             card.find({}).then(cards => {
                 res.json(cards);
             }).catch(() => {
-                res.json({ msg: 'falha ao listar' });
+                res.json({
+                    msg: 'falha ao listar'
+                });
             })
         },
 
         show: (req, res) => {
-            const { id } = req.params;
-            card.findOne({_id: id}).then(card => {
+            const {
+                id
+            } = req.params;
+            card.findOne({
+                _id: id
+            }).then(card => {
                 res.json(card);
             }).catch(() => {
-                res.json({ msg: 'card não encontrado!' });
+                res.json({
+                    msg: 'card não encontrado!'
+                });
             })
         },
 
         create: (req, res) => {
-            const cardData = {...req.body}
+            const cardData = { ...req.body };
+            const { _id } = req.user;
 
-            card.create(cardData).then(() => {
-                res.json({ msg: 'cartão adicionado!'});
-            }).catch(() => {
-                res.json({ msg: 'falha ao criar' });
+            card.create({ ...cardData, owner: _id }).then(response => {
+                users.findOneAndUpdate({ _id }, {businessCard: response })
+                    .then(() => {
+                        res.status(200).json({ msg: 'cartão criado!' });
+                    })
+            }).catch(err => {
+                res.status(400).json({ msg: 'falha na criacao '});
             })
+
         },
 
         update: (req, res) => {
-            const cardData = { ...req.body };
-            const { id } = req.params;
+            const cardData = {
+                ...req.body
+            };
+            const {
+                _id
+            } = req.user;
 
-            card.update({ _id: id }, cardData).then(() => {
-                res.json({ msg: 'card atualizado!' });
+            card.update({
+                owner: _id
+            }, cardData).then(() => {
+                res.json({
+                    msg: 'card atualizado!'
+                });
             }).catch(() => {
-                res.json({ msg: 'falha ao atualizar' });
+                res.json({
+                    msg: 'falha ao atualizar'
+                });
             })
         },
 
         remove: (req, res) => {
-            const { id } = req.body;
+            const {
+                id
+            } = req.body;
 
-            card.deleteOne({ _id: id }).then(() => {
-                res.json({ msg: 'card deletado!' });
+            card.deleteOne({
+                _id: id
+            }).then(() => {
+                res.json({
+                    msg: 'card deletado!'
+                });
             }).catch(() => {
-                res.json({ msg: 'falha ao excluir card' });
+                res.json({
+                    msg: 'falha ao excluir card'
+                });
             })
         }
     }

@@ -1,47 +1,54 @@
-const { Schema, model } = require('mongoose');
-const bcrypt = require('bcrypt-nodejs')
-
+const {
+    Schema,
+    model
+} = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
+const bcrypt = require('bcrypt-nodejs')
 
 module.exports = () => {
     const UserSchema = new Schema({
-        name:{
-            type: String,
-            require: true,
+        googleId: {
+            type: String
         },
-        email:{
+        name: {
             type: String,
-            require: true,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
             unique: true,
             lowercase: true
         },
-        password:{
+        password: {
             type: String,
-            require: true,
             select: false
         },
-        office:{
+        office: {
             type: String,
-            require: true
         },
-        phone:{
+        phone: {
             type: String,
-            require: true
         },
-        color:{
+        color: {
             type: String,
-            require: false,
             default: '#252C8F'
         },
-        image:{
+        image: {
             type: String,
-            require: false
         },
-        logo:{
+        logo: {
             type: String,
-            require: false
         },
-        createdAt:{
+        businessCard: {
+            type: Schema.Types.ObjectId,
+            ref: 'businesscard'
+        },
+        schedule: {
+            type: Schema.Types.ObjectId,
+            ref: 'Schedule'
+        },
+        createdAt: {
             type: Date,
             default: Date.now
         }
@@ -49,9 +56,9 @@ module.exports = () => {
 
     UserSchema.pre('save', async function (next) {
         var hash = bcrypt.hashSync(this.password);
-       
+
         this.password = hash;
-    
+
         next();
     });
 

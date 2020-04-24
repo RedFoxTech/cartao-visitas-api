@@ -2,7 +2,21 @@ module.exports = app => {
     const User = app.models.user;
 
     return {
-        async index(req, res) {
+        async show(req, res){
+            const { _id } = req.user;
+
+            try{
+                const currentUser = await User.findOne(
+                    { _id }
+                ).populate('businessCard');
+
+                res.json(currentUser);
+            }catch(error){
+                
+            }
+        },
+
+        /*async index(req, res) {
             try {
                 const users = await User.find();
 
@@ -14,7 +28,7 @@ module.exports = app => {
                     error: 'Error loading users'
                 });
             }
-        },
+        },*/
         async create(req, res) {
             const {
                 email
@@ -38,7 +52,7 @@ module.exports = app => {
 
             } catch (error) {
                 return res.status(400).send({
-                    error: 'Registration failed'
+                    error
                 });
             }
         },
@@ -70,6 +84,7 @@ module.exports = app => {
                 })
             }
         },
+
 
     }
 }
