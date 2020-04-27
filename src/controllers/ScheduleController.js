@@ -1,45 +1,59 @@
 module.exports = app => {
     const Schedule = app.models.schedule;
-    const User = app.models.user;
 
     const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
     return {
         async index(req, res) {
-            const { _id } = req.user;
+            const userId = req.user._id
 
             try {
-                const user = await User.findOne({ _id });
                 const schedule = await Schedule.findOne({
-                    userId: user
+                    userId: userId
                 }).populate('cards');
 
                 return res.send({
                     schedule
                 });
             } catch (error) {
+
                 return res.status(400).send({
                     error: 'Error loading schedule'
                 })
             }
         },
-        async update(req, res) {
+        async createOrUpdate(req, res) {
+            const userId = req.user._id
+            const cards = req.body.cards
+
             try {
-                const schedule = await Schedule.findOneAndUpdate({
-                    userId: req.user._id
-                }, {
-                    $push: {
-                        cards: req.body.card
-                    }
-                }, {
-                    new: true
+                const schedule = await Schedule.findOne({
+                    userId: userId
                 });
 
+                if (!schedule) {
+                    const create = await Schedule.create({
+                        userId: userId,
+                        cards: cards
+                    })
+
+                    return res.send(create)
+                }
+
+                const update = await Schedule.findOneAndUpdate({
+                    userId: userId
+                },{
+                    $push:{
+                        cards: cards
+                    }
+                })
+
                 return res.send({
-                    schedule
+                    update
                 });
 
             } catch (error) {
+                console.log(error)
                 return res.status(400).send({
                     error: 'Error updating schedule'
                 })
@@ -83,8 +97,8 @@ module.exports = app => {
                 });
 
                 const data = []
-                
-                schedule.cards.map((item,i) => {
+
+                schedule.cards.map((item, i) => {
                     data[i] = {
                         tags: item.tags,
                         notes: item.notes,
@@ -96,7 +110,7 @@ module.exports = app => {
                         website: item.website
                     }
                 });
-                
+
                 csvWriter
                     .writeRecords(data)
                     .then(() => console.log('The CSV file was written successfully'));
