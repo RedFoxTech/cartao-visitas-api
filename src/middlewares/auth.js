@@ -3,17 +3,18 @@ const {
     ExtractJwt,
     Strategy
 } = require('passport-jwt');
-const GoogleStrategy = require('passport-google-oauth20');
-
-const opt = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'secret'
-}
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 module.exports = (app) => {
     const Users = app.models.user;
+    const { JWT_SECRET, GOOGLE_CLIENT_ID, GOOGLE_SECRET } = app.config.config;
 
-    passport.use(new Strategy(opt, (payload, done) => {
+    const options = {
+        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+        secretOrKey: JWT_SECRET
+    }
+
+    passport.use(new Strategy(options, (payload, done) => {
         Users.findOne({
             _id: payload.id
         }).then(user => {
@@ -27,8 +28,8 @@ module.exports = (app) => {
     }));
 
     passport.use(new GoogleStrategy({
-            clientID: "803713707151-cv38nd7i4913k6l0s4vino3p37p50qns.apps.googleusercontent.com",
-            clientSecret: "bPB_Ozd6Sjkdprt_LMlBYE7w",
+            clientID: GOOGLE_CLIENT_ID,
+            clientSecret: GOOGLE_SECRET,
             callbackURL: "http://localhost:3000/google/callback"
         },
         function (accessToken, refreshToken, profile, done) {
@@ -43,25 +44,7 @@ module.exports = (app) => {
         }
     ));
 
-    passport.serializeUser(function (user, done) {
-        done(null, user);
-    });
-
-    passport.deserializeUser(function (user, done) {
-        done(null, user);
-    });
-
-
     app.use(passport.initialize());
-    app.use(passport.session());
 
-    return {
-        authenticate: passport.authenticate('google'),
-        authGoogle: passport.authenticate('google', {
-            scope: ['profile', 'email']
-        }),
-        authJwt: passport.authenticate('jwt', {
-            session: false
-        })
-    }
+    return passport;
 }

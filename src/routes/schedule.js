@@ -2,9 +2,12 @@
 module.exports = app => {
 
     const schedule = app.controllers.ScheduleController;
-    const auth = app.config.auth;
+    const passport = app.middlewares.auth;
 
-    app.get('/schedule', auth.authJwt, schedule.index);
-    app.put('/schedule', auth.authJwt, schedule.update);
+    app.all('/schedule', passport.authenticate('jwt', { session: false }));
+    app.all('/schedule/export/:userId', passport.authenticate('jwt', { session: false }));
+
+    app.get('/schedule', schedule.index);
+    app.put('/schedule', schedule.update);
     app.get('/schedule/export/:userId', schedule.exportTocsv);
 }

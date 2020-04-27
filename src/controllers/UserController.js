@@ -8,11 +8,11 @@ module.exports = app => {
             try{
                 const currentUser = await User.findOne(
                     { _id }
-                ).populate('businessCard');
+                )
 
                 res.json(currentUser);
             }catch(error){
-                
+                res.json({ msg: 'usuario não logado!'})
             }
         },
 

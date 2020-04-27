@@ -1,13 +1,17 @@
 module.exports = app => {
     const Schedule = app.models.schedule;
+    const User = app.models.user;
 
     const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
     return {
         async index(req, res) {
+            const { _id } = req.user;
+
             try {
+                const user = await User.findOne({ _id });
                 const schedule = await Schedule.findOne({
-                    userId: req.user._id
+                    userId: user
                 }).populate('cards');
 
                 return res.send({

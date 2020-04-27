@@ -25,7 +25,10 @@ module.exports = () => {
         location: String,
         website: String,
         tags: {
-            type: [String],
+            type: [{
+                type: Schema.Types.ObjectId,
+                ref: 'Tag'
+            }],
             default: []
         },
         notes: {

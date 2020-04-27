@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
 
 module.exports = app => {
+    const { JWT_SECRET } = app.config.config;
     const Users = app.models.user;
 
     return{
@@ -15,10 +16,9 @@ module.exports = app => {
                 if(!bcrypt.compareSync(password, user.password)) 
                     return res.json({ msg: 'password incorrect'});
 
-                const token = jwt.sign({ id: user._id }, 'secret');
-                const bearerToken = `Bearer ${token}`;
+                const token = jwt.sign({ id: user._id }, JWT_SECRET);
 
-                res.json({token: bearerToken});
+                res.json({ token });
             }).select('+password');
         }
     }

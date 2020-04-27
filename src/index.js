@@ -1,10 +1,9 @@
+require('dotenv/config');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const consign = require('consign');
-const chain = require('middleware-chain');
-
-const config = require('./config/config');
 
 var app = express();
 
@@ -15,15 +14,14 @@ app.use(bodyParser.urlencoded({
 }));
 
 consign({ cwd: 'src' })
-.include('database')
+.include('config')
+.then('database')
 .then('models')
-.then('config')
+.then('middlewares')
 .then('controllers')
 .then('routes')
 .into(app)
 
-//chain([app.config.initialize]);
-
-app.listen(config.PORT);
+app.listen(process.env.PORT);
 
 module.exports = app;

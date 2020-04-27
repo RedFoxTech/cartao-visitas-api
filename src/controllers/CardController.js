@@ -1,17 +1,20 @@
 module.exports = app => {
     const schedule = app.models.schedule;
-    const card = app.models.card;
+    const cards = app.models.card;
     const users = app.models.user;
 
     return {
-        index: (req, res) => {
-            card.find({}).then(cards => {
-                res.json(cards);
-            }).catch(() => {
-                res.json({
-                    msg: 'falha ao listar'
-                });
-            })
+        index: async (req, res) => {
+            const { _id } = req.user;
+
+            try{
+                const user = await users.findOne({ _id });
+                const card = await cards.find({});
+
+                res.json({card});
+            }catch(error){
+                res.json({error});
+            }
         },
 
         show: (req, res) => {
@@ -29,18 +32,18 @@ module.exports = app => {
             })
         },
 
-        create: (req, res) => {
+        create: async (req, res) => {
             const cardData = { ...req.body };
             const { _id } = req.user;
 
-            card.create({ ...cardData, owner: _id }).then(response => {
-                users.findOneAndUpdate({ _id }, {businessCard: response })
-                    .then(() => {
-                        res.status(200).json({ msg: 'cartão criado!' });
-                    })
-            }).catch(err => {
+            try{
+                const card = await cards.create(cardData);
+                const user = await users.updateOne({ _id }, { businessCard: card });
+
+                res.status(200).json({ msg: 'cartão criado '});
+            }catch(error){
                 res.status(400).json({ msg: 'falha na criacao '});
-            })
+            }
 
         },
 
@@ -68,7 +71,7 @@ module.exports = app => {
         remove: (req, res) => {
             const {
                 id
-            } = req.body;
+            } = req.params;
 
             card.deleteOne({
                 _id: id

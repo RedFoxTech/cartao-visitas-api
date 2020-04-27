@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const { MONGODB_URI, MONGODB_DATABASE } = require('../config/config');
+module.exports = app => {
+    const { MONGODB_URI, MONGODB_DATABASE } = app.config.config;
 
-module.exports = () => {
     mongoose.connect(
         `${MONGODB_URI}/${MONGODB_DATABASE}`,
         {
