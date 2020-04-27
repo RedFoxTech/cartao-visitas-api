@@ -13,8 +13,7 @@ module.exports = () => {
         },
         cards: [{
             type: Schema.Types.ObjectId,
-            ref: 'businesscard',
-            required: true
+            ref: 'businesscard'
         }]
     });
 

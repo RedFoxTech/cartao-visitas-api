@@ -13,6 +13,6 @@ module.exports = app => {
 
     app.get('/google/callback', passport.authenticate('google', {session: false}), (req, res) => {
         const token = jwt.sign({ id: req.user._id }, JWT_SECRET);
-        res.send({token});
+        res.json({ token });
     });
 }
