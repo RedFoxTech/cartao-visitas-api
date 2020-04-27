@@ -8,7 +8,7 @@ module.exports = app => {
     }));
     app.get('/google', auth.authGoogle);
     app.get('/google/callback', auth.authGoogle, (req, res) => {
-        res.send()
+        res.send(req.user)
     })
 
 }

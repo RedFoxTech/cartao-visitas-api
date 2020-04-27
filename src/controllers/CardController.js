@@ -69,10 +69,8 @@ module.exports = app => {
         },
 
         remove: (req, res) => {
-            const {
-                id
-            } = req.body;
-
+            const id = req.params.id;
+            
             card.deleteOne({
                 _id: id
             }).then(() => {
