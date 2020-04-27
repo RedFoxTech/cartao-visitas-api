@@ -1,13 +1,14 @@
 module.exports = app => {
     const User = app.models.user;
+    const Schedule = app.models.schedule;
 
     return {
         async show(req, res){
-            const { _id } = req.user;
+            const { id } = req.params;
 
             try{
                 const currentUser = await User.findOne(
-                    { _id }
+                    { _id: id }
                 )
 
                 res.json(currentUser);
@@ -16,9 +17,11 @@ module.exports = app => {
             }
         },
 
-        /*async index(req, res) {
+        async index(req, res) {
+            const { _id } = req.user;
+
             try {
-                const users = await User.find();
+                const users = await User.findOne({ _id });
 
                 return res.send({
                     users
@@ -28,7 +31,7 @@ module.exports = app => {
                     error: 'Error loading users'
                 });
             }
-        },*/
+        },
         async create(req, res) {
             const {
                 email
@@ -45,6 +48,8 @@ module.exports = app => {
                 const user = await User.create(req.body);
 
                 user.password = undefined;
+
+                await Schedule.create({ userId: user, cards: []});
 
                 return res.send({
                     user

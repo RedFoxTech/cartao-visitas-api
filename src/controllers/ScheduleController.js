@@ -2,6 +2,8 @@ module.exports = app => {
     const Schedule = app.models.schedule;
     const User = app.models.user;
 
+    const mail = app.services.mail;
+
     const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
     return {
@@ -100,6 +102,13 @@ module.exports = app => {
                 csvWriter
                     .writeRecords(data)
                     .then(() => console.log('The CSV file was written successfully'));
+                
+                mail.sendMail({
+                    from: 'joe doe <example@email.com>',
+                    to: 'Eu mesmo <example@gmail.com>',
+                    subject: 'Testando envio de emails',
+                    html: '<h1>CartãoVisitas</h1>'
+                });
 
                 return res.send();
             } catch (error) {

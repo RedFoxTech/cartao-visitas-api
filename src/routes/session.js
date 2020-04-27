@@ -12,7 +12,7 @@ module.exports = app => {
     ));
 
     app.get('/google/callback', passport.authenticate('google', {session: false}), (req, res) => {
-        const token = jwt.sign({ _id: req.user._id }, JWT_SECRET);
-        res.json({token});
+        const token = jwt.sign({ id: req.user._id }, JWT_SECRET);
+        res.json({ token });
     });
 }
