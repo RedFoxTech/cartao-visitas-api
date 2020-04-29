@@ -5,7 +5,9 @@ const {
 const findOrCreate = require('mongoose-findorcreate');
 const bcrypt = require('bcrypt-nodejs')
 
-module.exports = () => {
+module.exports = app => {
+    const Schedule = app.models.schedule;
+
     const UserSchema = new Schema({
         googleId: {
             type: String
@@ -40,10 +42,6 @@ module.exports = () => {
         logo: {
             type: String,
         },
-        businessCard: {
-            type: Schema.Types.ObjectId,
-            ref: 'businesscard'
-        },
         schedule: {
             type: Schema.Types.ObjectId,
             ref: 'Schedule'
@@ -56,11 +54,13 @@ module.exports = () => {
 
     UserSchema.pre('save', async function (next) {
         var hash = bcrypt.hashSync(this.password);
-
         this.password = hash;
-
         next();
     });
+
+    UserSchema.post('save', async function (){
+        return Schedule.create({ userId: this });
+    })
 
     UserSchema.plugin(findOrCreate);
     

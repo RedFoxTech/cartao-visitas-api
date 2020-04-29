@@ -5,9 +5,10 @@ module.exports = app => {
     const passport = app.middlewares.auth;
 
     app.all('/schedule', passport.authenticate('jwt', { session: false }));
+    app.all('/schedule/:userId', passport.authenticate('jwt', { session: false }));
     app.all('/schedule/export/:userId', passport.authenticate('jwt', { session: false }));
 
     app.get('/schedule', schedule.index);
-    app.put('/schedule', schedule.update);
-    app.get('/schedule/export/:userId', schedule.exportTocsv);
+    app.put('/schedule/:userId', schedule.update);
+    app.get('/schedule/export', schedule.exportTocsv);
 }

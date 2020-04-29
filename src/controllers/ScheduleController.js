@@ -1,10 +1,11 @@
 module.exports = app => {
     const Schedule = app.models.schedule;
     const User = app.models.user;
+    const Card = app.models.card;
 
     const mail = app.services.mail;
 
-    const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+    const createCsvStringfier = require('csv-writer').createObjectCsvStringifier;
 
     return {
         async index(req, res) {
@@ -16,7 +17,7 @@ module.exports = app => {
                     userId: user
                 }).populate('cards');
 
-                return res.send({
+                return res.status(200).send({
                     schedule
                 });
             } catch (error) {
@@ -26,91 +27,89 @@ module.exports = app => {
             }
         },
         async update(req, res) {
+            const { userId } = req.params;
+
             try {
-                const schedule = await Schedule.findOneAndUpdate({
-                    userId: req.user._id
-                }, {
-                    $push: {
-                        cards: req.body.card
-                    }
-                }, {
-                    new: true
+                const {
+                    name,
+                    company,
+                    office,
+                    email,
+                    phone,
+                    image,
+                    logo
+                } = await User.findOne({ _id: userId });
+
+                const { doc: card } = await Card.findOrCreate({
+                    name,
+                    company,
+                    office,
+                    email,
+                    phone,
+                    image,
+                    logo
                 });
 
-                return res.send({
-                    schedule
-                });
+                const schedule = await Schedule.findOne({ userId: req.user._id });
+                schedule.cards.push(card);
+                schedule.save();
+
+                return res.status(200).send(schedule);
 
             } catch (error) {
                 return res.status(400).send({
-                    error: 'Error updating schedule'
+                    error
                 })
             }
         },
         async exportTocsv(req, res) {
             try {
 
+                const user = await User.findOne({ _id: req.user._id });
                 const schedule = await Schedule.findOne({
-                    userId: req.params.userId
+                    userId: req.user._id
                 }).select('cards').populate('cards')
 
                 //adicionar campos do cartao
-                const csvWriter = createCsvWriter({
-                    path: 'schedule.csv',
+                const csvStringfier = createCsvStringfier({
                     header: [{
-                        id: 'tags',
-                        title: 'tags'
-                    }, {
-                        id: 'notes',
-                        title: 'notes'
-                    }, {
-                        id: 'fullName',
-                        title: 'fullName'
+                        id: 'name',
+                        title: 'NAME'
                     }, {
                         id: 'company',
-                        title: 'company'
+                        title: 'COMPANY'
                     }, {
-                        id: 'jobTitle',
-                        title: 'jobTitle'
+                        id: 'office',
+                        title: 'OFFICE'
                     }, {
                         id: 'email',
-                        title: 'email'
+                        title: 'EMAIL'
                     }, {
-                        id: 'location',
-                        title: 'location'
+                        id: 'phone',
+                        title: 'PHONE'
                     }, {
-                        id: 'website',
-                        title: 'website'
+                        id: 'email',
+                        title: 'EMAIL'
                     }]
                 });
 
-                const data = []
                 
-                schedule.cards.map((item,i) => {
-                    data[i] = {
-                        tags: item.tags,
-                        notes: item.notes,
-                        fullName: item.fullName,
-                        company: item.company,
-                        jobTitle: item.jobTitle,
-                        email: item.email,
-                        location: item.location,
-                        website: item.website
-                    }
-                });
+                const csvProperty = csvStringfier.getHeaderString(schedule.cards);
+                const csvValues = csvStringfier.stringifyRecords(schedule.cards);
                 
-                csvWriter
-                    .writeRecords(data)
-                    .then(() => console.log('The CSV file was written successfully'));
                 
                 mail.sendMail({
-                    from: 'joe doe <example@email.com>',
-                    to: 'Eu mesmo <example@gmail.com>',
+                    from: 'joe doe <example@redfox.tech>',
+                    to: `${user.name} <${user.email}>`,
                     subject: 'Testando envio de emails',
-                    html: '<h1>CartãoVisitas</h1>'
+                    html: '<h1>CartãoVisitas</h1>',
+                    attachments: [{
+                        filename: 'cards.csv',
+                        content: `${csvProperty}${csvValues}`
+                    }]
                 });
 
-                return res.send();
+                return res.status(200).send('email enviado!');
             } catch (error) {
                 return res.status(400).send({
                     error: 'Error exporting schedule'

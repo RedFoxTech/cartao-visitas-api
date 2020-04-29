@@ -9,7 +9,7 @@ module.exports = app => {
     app.get('/business-card/:id', card.show);
     app.get('/business-card', card.index);
     app.post('/business-card/', card.create);
-    app.put('/business-card/', card.update);
+    app.put('/business-card/:id', card.update);
     app.delete('/business-card/:id', card.remove);
 
 }

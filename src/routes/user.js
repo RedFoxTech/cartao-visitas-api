@@ -4,7 +4,7 @@ module.exports = app => {
 
     app.all('/users/:userId', passport.authenticate('jwt', { session: false }));
 
-    app.get('/users', passport.authenticate('jwt', { session: false }), UserController.show);
+    app.get('/users', passport.authenticate('jwt', { session: false }), UserController.index);
     app.post('/users', UserController.create);
     app.put('/users/:userId', UserController.update);
     app.delete('/users/:userId', UserController.delete);

@@ -13,7 +13,7 @@ module.exports = app => {
 
                 res.json(currentUser);
             }catch(error){
-                res.json({ msg: 'usuario não logado!'})
+                res.json({ msg: 'user not found'})
             }
         },
 
@@ -48,8 +48,6 @@ module.exports = app => {
                 const user = await User.create(req.body);
 
                 user.password = undefined;
-
-                await Schedule.create({ userId: user, cards: []});
 
                 return res.send({
                     user

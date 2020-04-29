@@ -11,14 +11,14 @@ module.exports = app => {
             
             Users.findOne({ email }, (err, user) => {
                 //se não encontrar usuario
-                if(!user) return res.json({msg: 'incorrect email!'});
+                if(!user) return res.status(400).json({msg: 'incorrect email!'});
                 //se a senha estiver errada
                 if(!bcrypt.compareSync(password, user.password)) 
-                    return res.json({ msg: 'password incorrect'});
+                    return res.status(400).json({ msg: 'password incorrect'});
 
                 const token = jwt.sign({ id: user._id }, JWT_SECRET);
 
-                res.json({ token });
+                res.status(200).json({ token });
             }).select('+password');
         }
     }
