@@ -9,18 +9,18 @@ module.exports = app => {
 
     return {
         async index(req, res) {
-            const { _id } = req.user;
+            const userId = req.user._id
 
             try {
-                const user = await User.findOne({ _id });
                 const schedule = await Schedule.findOne({
-                    userId: user
+                    userId: userId
                 }).populate('cards');
 
                 return res.status(200).send({
                     schedule
                 });
             } catch (error) {
+
                 return res.status(400).send({
                     error: 'Error loading schedule'
                 })
@@ -57,6 +57,7 @@ module.exports = app => {
                 return res.status(200).send(schedule);
 
             } catch (error) {
+                console.log(error)
                 return res.status(400).send({
                     error
                 })
