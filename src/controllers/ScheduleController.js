@@ -121,7 +121,7 @@ module.exports = app => {
                     from: 'joe doe <example@email.com>',
                     to: 'Eu mesmo <example@gmail.com>',
                     subject: 'Testando envio de emails',
-                    html: '<h1>CartãoVisitas</h1>'
+                    html: '<h1>CartãoVisitas</h1>',
                 });
 
                 return res.send();

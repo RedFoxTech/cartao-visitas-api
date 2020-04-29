@@ -16,6 +16,10 @@
   "bugs": {
     "url": "https://github.com/RedFoxTech/cartao-visitas-api/issues"
   },
+  "apidoc": {
+    "title": "",
+    "url" : ""
+  },
   "homepage": "https://github.com/RedFoxTech/cartao-visitas-api#readme",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",

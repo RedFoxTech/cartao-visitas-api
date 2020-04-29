@@ -1,11 +1,9 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = app => {
-    const SessionController = app.controllers.SessionController;
     const passport = app.middlewares.auth;
     const { JWT_SECRET } = app.config.config;
 
-    app.post('/login', SessionController.create)
     app.get('/google', passport.authenticate(
         'google', 
         { scope: ['profile', 'email'], session: false }

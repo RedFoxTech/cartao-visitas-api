@@ -1,11 +1,9 @@
 module.exports = app => {
     const User = app.models.user;
-    const Schedule = app.models.schedule;
 
     return {
         async show(req, res){
-            const { id } = req.params;
-
+            const id  = req.user._id;
             try{
                 const currentUser = await User.findOne(
                     { _id: id }
@@ -13,10 +11,12 @@ module.exports = app => {
 
                 res.json(currentUser);
             }catch(error){
-                res.json({ msg: 'usuario não logado!'})
+                return res.status(400).send({
+                    error: 'Error loading logged user'
+                });
             }
         },
-
+        
         async index(req, res) {
             const { _id } = req.user;
 
@@ -32,38 +32,10 @@ module.exports = app => {
                 });
             }
         },
-        async create(req, res) {
-            const {
-                email
-            } = req.body
 
-            try {
-                if (await User.findOne({
-                        email
-                    }))
-                    return res.status(400).send({
-                        error: 'User already exists'
-                    });
-
-                const user = await User.create(req.body);
-
-                user.password = undefined;
-
-                await Schedule.create({ userId: user, cards: []});
-
-                return res.send({
-                    user
-                });
-
-            } catch (error) {
-                return res.status(400).send({
-                    error
-                });
-            }
-        },
         async update(req, res) {
             try {
-                const user = await User.findByIdAndUpdate(req.params.userId, {
+                const user = await User.findByIdAndUpdate(req.user._id, {
                     ...req.body
                 }, {
                     new: true
@@ -80,9 +52,9 @@ module.exports = app => {
         },
         async delete(req, res) {
             try {
-                await User.findByIdAndRemove(req.params.userId);
+                await User.findByIdAndRemove(req.user._id);
 
-                return res.send();
+                return res.send({UserDeletedSucess: "The logged in user was deleted"});
             } catch (error) {
                 res.status(400).send({
                     error: 'Error deleting user'
