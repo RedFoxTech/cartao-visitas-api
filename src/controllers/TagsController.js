@@ -9,9 +9,9 @@ module.exports = app => {
             try{
                 const user = await User.findOne({ _id })
                 const tags = await Tags.find({ userId: user });
-                res.json(tags);
+                res.status(200).json(tags);
             }catch(error){
-                res.json({ error });
+                res.status(400).json({ error });
             }
         },
 
@@ -23,9 +23,9 @@ module.exports = app => {
                 const user = await User.findOne({ _id });
                 const tag = await Tags.create({ name, userId: user });
 
-                res.json({ msg: 'tag criada' });
+                res.status(200).json({ msg: 'tag criada' });
             }catch(error){
-                res.json({ msg: error });
+                res.status(400).json({ msg: error });
             }
         },
 
@@ -37,9 +37,9 @@ module.exports = app => {
                 const user = await User.findOne({ _id });
                 const response = await Tags.deleteOne({ userId: user._id });
 
-                res.json({ msg: response });
+                res.status(200).json({ msg: response });
             }catch(error){
-                res.json({ msg: error });
+                res.status(400).json({ msg: error });
             }
         },
 
@@ -55,9 +55,9 @@ module.exports = app => {
                     { name }
                 )
 
-                res.json({msg: 'alteração feita' })
+                res.status(200).json({msg: 'alteração feita' })
             }catch(error){
-                res.json({ msg: 'falha na alteração '});
+                res.status(400).json({ msg: 'falha na alteração '});
             }
         }
     }

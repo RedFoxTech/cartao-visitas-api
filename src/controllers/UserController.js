@@ -32,7 +32,6 @@ module.exports = app => {
                 });
             }
         },
-
         async update(req, res) {
             try {
                 const user = await User.findByIdAndUpdate(req.user._id, {

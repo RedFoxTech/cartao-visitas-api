@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
 
+const findOrCreate = require('mongoose-findorcreate');
+
 module.exports = () => {
     const TagSchema = new Schema({
         name: {
@@ -11,6 +13,8 @@ module.exports = () => {
             required: true
         }
     });
+
+    TagSchema.plugin(findOrCreate);
 
     return model('Tag', TagSchema);
 }

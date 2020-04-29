@@ -1,29 +1,15 @@
 const { Schema, model } = require('mongoose');
+const findOrCreate = require('mongoose-findorcreate');
 
 module.exports = () => {
     const BusinessCardSchema = new Schema({
-        fullName: {
-            type: String,
-            required: true
-        },
-        company: {
-            type: String,
-            required: true
-        },
-        jobTitle: {
-            type: String,
-            required: true
-        },
-        owner: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        email: {
-            type: String,
-            required: true
-        },
-        location: String,
-        website: String,
+        name: String,
+        company: String,
+        office: String,
+        email: String,
+        phone: String,
+        image: String,
+        logo: String,
         tags: {
             type: [{
                 type: Schema.Types.ObjectId,
@@ -36,6 +22,8 @@ module.exports = () => {
             default: ''
         }
     });
+
+    BusinessCardSchema.plugin(findOrCreate);
 
     return model('businesscard', BusinessCardSchema);
 }
