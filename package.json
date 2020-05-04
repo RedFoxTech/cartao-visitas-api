@@ -18,7 +18,11 @@
   },
   "apidoc": {
     "title": "",
+<<<<<<< HEAD
     "url": ""
+=======
+    "url" : ""
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
   },
   "homepage": "https://github.com/RedFoxTech/cartao-visitas-api#readme",
   "dependencies": {

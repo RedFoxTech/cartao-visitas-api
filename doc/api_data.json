@@ -1,6 +1,7 @@
 [
   {
     "type": "delete",
+<<<<<<< HEAD
     "url": "/business-card/:id",
     "title": "Request card information.",
     "parameter": {
@@ -120,14 +121,25 @@
     },
     "name": "PutBusinessCard",
     "group": "BusinessCard",
+=======
+    "url": "/users",
+    "title": "Delete logged user",
+    "name": "DeleteUser",
+    "group": "User",
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
     "success": {
       "fields": {
         "200": [
           {
             "group": "200",
             "optional": false,
+<<<<<<< HEAD
             "field": "msg",
             "description": "<p>sucessfully updated business card.</p>"
+=======
+            "field": "UserDeletedSucess",
+            "description": "<p>The logged in user was deleted</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           }
         ]
       }
@@ -139,12 +151,17 @@
             "group": "400",
             "optional": false,
             "field": "error",
+<<<<<<< HEAD
             "description": "<p>Error updated business card.</p>"
+=======
+            "description": "<p>Error deleting user.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           }
         ]
       }
     },
     "version": "0.0.0",
+<<<<<<< HEAD
     "filename": "src/routes/card.js",
     "groupTitle": "BusinessCard"
   },
@@ -164,34 +181,62 @@
     "title": "Request logged user schedule.",
     "name": "GetSchedule",
     "group": "Schedule",
+=======
+    "filename": "src/routes/user.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/users",
+    "title": "Request logged user information",
+    "name": "GetUser",
+    "group": "User",
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
     "success": {
       "fields": {
         "Success 200": [
           {
             "group": "Success 200",
+<<<<<<< HEAD
             "type": "Object",
             "optional": false,
             "field": "cards",
             "description": "<p>logged user cards.</p>"
+=======
+            "type": "String",
+            "optional": false,
+            "field": "color",
+            "description": "<p>Color card.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
             "field": "_id",
+<<<<<<< HEAD
             "description": "<p>ID schedule.</p>"
+=======
+            "description": "<p>User ID.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
+<<<<<<< HEAD
             "field": "userId",
             "description": "<p>logged user id.</p>"
+=======
+            "field": "googleId",
+            "description": "<p>Google user ID.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
+<<<<<<< HEAD
             "field": "_v",
             "description": "<p>version key.</p>"
           }
@@ -310,20 +355,34 @@
             "optional": false,
             "field": "_id",
             "description": "<p>Tag ID.</p>"
+=======
+            "field": "name",
+            "description": "<p>Username.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
+<<<<<<< HEAD
             "field": "name",
             "description": "<p>Tag name.</p>"
+=======
+            "field": "email",
+            "description": "<p>user email.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
+<<<<<<< HEAD
             "field": "userId",
             "description": "<p>User ID logged in.</p>"
+=======
+            "field": "createdAt",
+            "description": "<p>User creation date.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           },
           {
             "group": "Success 200",
@@ -331,6 +390,7 @@
             "optional": false,
             "field": "__v",
             "description": "<p>version key.</p>"
+<<<<<<< HEAD
           }
         ]
       }
@@ -432,6 +492,22 @@
             "optional": false,
             "field": "msg",
             "description": "<p>successfully updated tag.</p>"
+=======
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "businessCard",
+            "description": "<p>ID user card.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "schedule",
+            "description": "<p>ID user schedule.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           }
         ]
       }
@@ -443,6 +519,7 @@
             "group": "400",
             "optional": false,
             "field": "error",
+<<<<<<< HEAD
             "description": "<p>Error updating tag.</p>"
           }
         ]
@@ -478,6 +555,9 @@
             "optional": false,
             "field": "error",
             "description": "<p>Error deleting user.</p>"
+=======
+            "description": "<p>Error loading logged user.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           }
         ]
       }
@@ -487,10 +567,17 @@
     "groupTitle": "User"
   },
   {
+<<<<<<< HEAD
     "type": "get",
     "url": "/users",
     "title": "Request logged user information",
     "name": "GetUser",
+=======
+    "type": "put",
+    "url": "/users",
+    "title": "Update logged user information",
+    "name": "PutUser",
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
     "group": "User",
     "success": {
       "fields": {
@@ -548,13 +635,19 @@
             "group": "Success 200",
             "type": "String",
             "optional": false,
+<<<<<<< HEAD
             "field": "image",
             "description": "<p>perfil image.</p>"
+=======
+            "field": "businessCard",
+            "description": "<p>ID user card.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           },
           {
             "group": "Success 200",
             "type": "String",
             "optional": false,
+<<<<<<< HEAD
             "field": "logo",
             "description": "<p>card logo.</p>"
           },
@@ -646,6 +739,10 @@
             "optional": false,
             "field": "msg",
             "description": "<p>sucessfully updated user.</p>"
+=======
+            "field": "schedule",
+            "description": "<p>ID user schedule.</p>"
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
           }
         ]
       }

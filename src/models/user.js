@@ -52,7 +52,6 @@ module.exports = app => {
 
     UserSchema.post('save', async function (){
         return Schedule.create({ userId: this });
-
     })
 
     UserSchema.plugin(findOrCreate);

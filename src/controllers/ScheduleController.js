@@ -77,9 +77,7 @@ module.exports = app => {
         async exportTocsv(req, res) {
             try {
 
-                const user = await User.findOne({
-                    _id: req.user._id
-                });
+                const user = await User.findOne({ _id: req.user._id });
                 const schedule = await Schedule.findOne({
                     userId: req.user._id
                 }).select('cards').populate('cards')
@@ -107,11 +105,11 @@ module.exports = app => {
                     }]
                 });
 
-
+                
                 const csvProperty = csvStringfier.getHeaderString(schedule.cards);
                 const csvValues = csvStringfier.stringifyRecords(schedule.cards);
-
-
+                
+                
                 mail.sendMail({
                     from: 'joe doe <example@redfox.tech>',
                     to: `${user.name} <${user.email}>`,

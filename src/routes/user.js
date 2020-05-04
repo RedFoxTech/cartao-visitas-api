@@ -16,11 +16,16 @@ module.exports = app => {
      * @apiSuccess {String} email user email.
      * @apiSuccess {String} createdAt User creation date.
      * @apiSuccess {String} __v version key.
+<<<<<<< HEAD
      * @apiSuccess {String} image perfil image.
      * @apiSuccess {String} logo card logo.
      * @apiSuccess {String} office user office.
      * @apiSuccess {String} phone user phone number.
      * 
+=======
+     * @apiSuccess {String} businessCard ID user card.
+     * @apiSuccess {String} schedule ID user schedule.
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
      * 
      * @apiError (400) error Error loading logged user.
      *
@@ -29,6 +34,7 @@ module.exports = app => {
 
     /**
      * @api {put} /users Update logged user information
+<<<<<<< HEAD
      * @apiParam {String} color Color card.
      * @apiParam {String} image perfil image.
      * @apiParam {String} logo card logo.
@@ -38,6 +44,20 @@ module.exports = app => {
      * @apiGroup User
      *
      * @apiSuccess (200) msg sucessfully updated user.
+=======
+     * @apiName PutUser
+     * @apiGroup User
+     *
+     * @apiSuccess {String} color Color card.
+     * @apiSuccess {String} _id User ID.
+     * @apiSuccess {String} googleId Google user ID.
+     * @apiSuccess {String} name Username.
+     * @apiSuccess {String} email user email.
+     * @apiSuccess {String} createdAt User creation date.
+     * @apiSuccess {String} __v version key.
+     * @apiSuccess {String} businessCard ID user card.
+     * @apiSuccess {String} schedule ID user schedule.
+>>>>>>> c3c3adcbcb9c53565a8025d2e1918fa9e040ce45
      * 
      * @apiError (400) error Error updating user.
      *
