@@ -1,0 +1,40 @@
+version: '3'
+
+services: 
+    api:
+        container_name: cartao_visitas_api
+        image: node:10-alpine
+        networks: 
+            - db_networks
+            - mail_network
+        ports: 
+            - "3000:3000"
+        depends_on: 
+            - db
+        working_dir: /app
+        volumes: 
+            - ./:/app
+        command: sh -c "npm install && npm run start"
+        
+    db:
+        container_name: cartao_visitas_db
+        image: mongo
+        ports:
+            - "27017:27017"
+        volumes: 
+            - ./mongo/data:/data/db
+        networks: 
+            - db_networks
+
+    mailhog:
+        container_name: cartao_visitas_mail
+        image: mailhog/mailhog
+        networks: 
+            - mail_network
+        ports: 
+            - '1025:1025'
+            - '8025:8025'
+
+networks: 
+    db_networks:
+    mail_network:
