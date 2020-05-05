@@ -23,23 +23,21 @@ module.exports = app => {
                 const user = await User.findOne({ _id });
                 const tag = await Tags.create({ name, userId: user });
 
-                res.status(200).json({ msg: 'tag criada' });
+                res.status(200).json({ msg: 'successfully created tag' });
             }catch(error){
-                res.status(400).json({ msg: error });
+                res.status(400).json({ msg: 'error creating tag' });
             }
         },
 
         remove: async (req, res) => {
             const { id } = req.params;
-            const { _id } = req.user;
 
             try{
-                const user = await User.findOne({ _id });
-                const response = await Tags.deleteOne({ userId: user._id });
+                const response = await Tags.deleteOne({ _id:id });
 
-                res.status(200).json({ msg: response });
+                res.status(200).json({ msg: 'sucessfully deleted tag' });
             }catch(error){
-                res.status(400).json({ msg: error });
+                res.status(400).json({ msg: 'error deleted tag' });
             }
         },
 
@@ -55,9 +53,9 @@ module.exports = app => {
                     { name }
                 )
 
-                res.status(200).json({msg: 'alteração feita' })
+                res.status(200).json({msg: 'sucessfully updated tag' })
             }catch(error){
-                res.status(400).json({ msg: 'falha na alteração '});
+                res.status(400).json({ msg: 'error updating tag'});
             }
         }
     }

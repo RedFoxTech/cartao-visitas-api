@@ -1,4 +1,7 @@
-const { Schema, model } = require('mongoose');
+const {
+    Schema,
+    model
+} = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 
 module.exports = () => {
@@ -10,13 +13,11 @@ module.exports = () => {
         phone: String,
         image: String,
         logo: String,
-        tags: {
-            type: [{
-                type: Schema.Types.ObjectId,
-                ref: 'Tag'
-            }],
+        tags: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Tag',
             default: []
-        },
+        }],
         notes: {
             type: String,
             default: ''

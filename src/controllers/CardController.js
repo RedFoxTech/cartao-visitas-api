@@ -9,7 +9,7 @@ module.exports = app => {
             } = req.params;
             cards.findOne({
                 _id: id
-            }).then(card => {
+            }).populate('tags').then(card => {
                 res.status(200).json(card);
             }).catch(() => {
                 res.status(400).json({
@@ -20,17 +20,15 @@ module.exports = app => {
 
         update: async (req, res) => {
             const { id } = req.params;
-            const { name } = req.body;
-            const { _id } = req.user;
+            const { tags } = req.body;
 
             try{
                 const card = await cards.findOne({ _id: id });
-                const { doc: tag } = await tags.findOrCreate({ userId: _id, name });
-
-                card.tags.push(tag);
+             
+                card.tags.push(tags);
                 card.save();
 
-                res.status.json({card});
+                res.status(200).json({msg: 'sucessfully updated card'})
             }catch(error){
                 res.status(400).json(error)
             }
@@ -45,11 +43,11 @@ module.exports = app => {
                 _id: id
             }).then(() => {
                 res.status.json({
-                    msg: 'card deletado!'
+                    msg: 'sucessfully deleted business card'
                 });
             }).catch(() => {
                 res.status(400).json({
-                    msg: 'falha ao excluir card'
+                    msg: 'error deleting business card'
                 });
             })
         }

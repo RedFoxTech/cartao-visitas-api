@@ -4,6 +4,11 @@ module.exports = app => {
     const passport = app.middlewares.auth;
     const { JWT_SECRET } = app.config.config;
 
+    /**
+     * @api {get} /google Login with google
+     * @apiName GetLogin
+     * @apiGroup Login
+     */
     app.get('/google', passport.authenticate(
         'google', 
         { scope: ['profile', 'email'], session: false }

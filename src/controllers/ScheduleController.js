@@ -14,7 +14,12 @@ module.exports = app => {
             try {
                 const schedule = await Schedule.findOne({
                     userId: userId
-                }).populate('cards');
+                }).populate({
+                    path: 'cards',
+                    populate: {
+                        path: 'tags'
+                    }
+                });
 
                 return res.status(200).send({
                     schedule
@@ -27,7 +32,7 @@ module.exports = app => {
             }
         },
         async update(req, res) {
-            const { userId } = req.params;
+            const userId = req.user._id;
 
             try {
                 const {
@@ -38,9 +43,13 @@ module.exports = app => {
                     phone,
                     image,
                     logo
-                } = await User.findOne({ _id: userId });
+                } = await User.findOne({
+                    _id: userId
+                });
 
-                const { doc: card } = await Card.findOrCreate({
+                const {
+                    doc: card
+                } = await Card.findOrCreate({
                     name,
                     company,
                     office,
@@ -50,7 +59,9 @@ module.exports = app => {
                     logo
                 });
 
-                const schedule = await Schedule.findOne({ userId: req.user._id });
+                const schedule = await Schedule.findOne({
+                    userId: req.user._id
+                });
                 schedule.cards.push(card);
                 schedule.save();
 
@@ -110,7 +121,9 @@ module.exports = app => {
                     }]
                 });
 
-                return res.status(200).send('email enviado!');
+                return res.status(200).json({
+                    msg: 'send email'
+                });
             } catch (error) {
                 return res.status(400).send({
                     error: 'Error exporting schedule'

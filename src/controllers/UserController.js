@@ -44,9 +44,7 @@ module.exports = app => {
                     new: true
                 });
 
-                return res.send({
-                    user
-                });
+                return res.status(200).json({msg: 'sucessfully updated user'});
             } catch (error) {
                 res.status(400).send({
                     error: 'Error updating user'

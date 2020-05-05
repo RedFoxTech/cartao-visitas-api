@@ -22,10 +22,6 @@ module.exports = app => {
             unique: true,
             lowercase: true
         },
-        password: {
-            type: String,
-            select: false
-        },
         office: {
             type: String,
         },
@@ -41,10 +37,6 @@ module.exports = app => {
         },
         logo: {
             type: String,
-        },
-        schedule: {
-            type: Schema.Types.ObjectId,
-            ref: 'Schedule'
         },
         createdAt: {
             type: Date,
