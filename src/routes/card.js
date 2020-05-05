@@ -7,8 +7,6 @@ module.exports = app => {
     app.all('/business-card/:id', passport.authenticate('jwt', { session: false }));
 
     app.get('/business-card/:id', card.show);
-    app.get('/business-card', card.index);
-    app.post('/business-card/', card.create);
     app.put('/business-card/:id', card.update);
     app.delete('/business-card/:id', card.remove);
 

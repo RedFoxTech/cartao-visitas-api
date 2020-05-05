@@ -1,8 +1,15 @@
 module.exports = app => {
     const UserController = app.controllers.UserController;
     const passport = app.middlewares.auth;
+    const upload = app.middlewares.uploads;
 
-    app.all('/user', passport.authenticate('jwt', { session: false }));
+    app.all('/user', [
+        passport.authenticate('jwt', { session: false }), 
+        upload.fields([
+            {name: 'image', maxCount: 1},
+            {name: 'logo', maxCount: 1}
+        ])
+    ]);
 
     /**
      * @api {get} /users Request logged user information
