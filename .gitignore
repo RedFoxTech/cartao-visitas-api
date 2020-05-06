@@ -2,3 +2,4 @@ mongo
 node_modules
 .env
 .gitignore
+vision_key.json

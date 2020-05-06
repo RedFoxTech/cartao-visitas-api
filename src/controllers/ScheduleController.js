@@ -40,12 +40,8 @@ module.exports = app => {
                     company,
                     office,
                     email,
-                    phone,
-                    image,
-                    logo
-                } = await User.findOne({
-                    _id: userId
-                });
+                    phone
+                } = req.body;
 
                 const {
                     doc: card
@@ -54,9 +50,7 @@ module.exports = app => {
                     company,
                     office,
                     email,
-                    phone,
-                    image,
-                    logo
+                    phone
                 });
 
                 const schedule = await Schedule.findOne({
