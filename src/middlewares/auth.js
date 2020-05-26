@@ -41,6 +41,7 @@ module.exports = (app) => {
             }, function (err, user) {
                 return done(err, user);
             });
+            console.log(profile)
         }
     ));
 

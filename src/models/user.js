@@ -25,6 +25,9 @@ module.exports = app => {
         office: {
             type: String,
         },
+        company: {
+            type: String
+        },
         phone: {
             type: String,
         },

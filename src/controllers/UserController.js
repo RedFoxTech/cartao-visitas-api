@@ -33,13 +33,14 @@ module.exports = app => {
             }
         },
         async update(req, res) {
-            const { image, logo } = req.files;
+            const imgDest = req.files[0].path || null;
+            const logoDest = req.files[1].path || null;
 
             try {
                 const user = await User.findByIdAndUpdate(req.user._id, {
                     ...req.body,
-                    image: image[0].path,
-                    logo: logo[0].path
+                    image: imgDest,
+                    logo: logoDest
                 }, {
                     new: true
                 });
